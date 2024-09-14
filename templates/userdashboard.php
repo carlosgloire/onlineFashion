@@ -29,28 +29,18 @@ $query = $db->prepare("
 $query->execute([$user_id]);
 $orders = $query->fetchAll(PDO::FETCH_ASSOC);
 
-// Group orders by order_id and date
+// Group orders by order_id and add the order_date to each group
 $grouped_orders = [];
 
 foreach ($orders as $order) {
     $order_id = $order['order_id'];
-    $date = date('d/m/Y', strtotime($order['order_date']));
-    if (!isset($grouped_orders[$date])) {
-        $grouped_orders[$date] = [];
+    if (!isset($grouped_orders[$order_id])) {
+        $grouped_orders[$order_id] = [
+            'order_date' => date('d/m/Y', strtotime($order['order_date'])),
+            'items' => []
+        ];
     }
-    if (!isset($grouped_orders[$date][$order_id])) {
-        $grouped_orders[$date][$order_id] = [];
-    }
-    $grouped_orders[$date][$order_id][] = $order;
-}
-$pending_order_found = false; // Initialize the flag
-
-// Iterate over all orders to check if there is any pending order
-foreach ($orders as $order) {
-    if ($order['order_status'] === 'pending') {
-        $pending_order_found = true;
-        break;
-    }
+    $grouped_orders[$order_id]['items'][] = $order;
 }
 ?>
 <!DOCTYPE html>
@@ -64,7 +54,6 @@ foreach ($orders as $order) {
     <!--css-->
     <link rel="stylesheet" href="../asset/css/style.css">
     <link rel="stylesheet" href="../asset/css/product.css">
-    <link rel="shortcut icon" href="../asset/images/logo.png">
 
     <!--Icons-->
     <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.0/css/boxicons.min.css">
@@ -81,13 +70,13 @@ foreach ($orders as $order) {
 </head>
 <style>
     .pay{
-    color: #fff;
-    font-weight: 700;
-    padding: 10px 15px;
-    border-radius: 20px;
-    justify-content: center;
-    background-color: #37517e;
-    margin: auto;
+        color: #fff;
+        font-weight: 700;
+        padding: 10px 15px;
+        border-radius: 20px;
+        justify-content: center;
+        background-color: #37517e;
+        margin: auto;
     }
 </style>
 <body>
@@ -129,49 +118,60 @@ foreach ($orders as $order) {
     </section>
     
     <section class="user-prod padding">
-        <?php foreach ($grouped_orders as $date => $orders_by_date): ?>
-            <div class="user-date"><?= $date ?></div>
-            <?php foreach ($orders_by_date as $order_id => $order_items): ?>
-                <?php foreach ($order_items as $order): ?>
-                    <div class="user-prod-container">
-                        <div class="user-prod-img">
-                            <img src="../asset/images/product/<?= $order['product_image'] ?>" alt="<?= $order['name'] ?>">
-                            <div class="user-prod-details">
-                                <h4><?= $order['name'] ?></h4>
-                                <span><?= $order['price'] ?> RWF</span>
-                            </div>
-                        </div>
-                        <div>
-                            <h4>Size</h4>
-                            <p><?= $order['size'] ?></p>
-                        </div>
-                        <div>
-                            <h4>Quantity</h4>
-                            <p><?= $order['quantity'] ?></p>
-                        </div>
-                        <div>
-                            <h4>Total price</h4>
-                            <p><?= $order['total_price'] ?> RWF</p>
-                        </div>
-                        <div style="text-align: left;">
-                            <div class="delete" data-order-item-id="<?= $order['order_item_id'] ?>">
-                                <div><i class="bi bi-trash3"></i> Delete</div>
-                            </div>
-                            <div style="background-color:none;">
-                                <a href="edit_order.php?order_item_id=<?= $order['order_item_id'] ?>&order_id=<?= $order_id ?>" style="color: black;"> 
-                                    <i class="bi bi-pencil-square"></i> Edit
-                                </a>
-                            </div>
-                        </div>
-                        
+    <?php foreach ($grouped_orders as $order_id => $order_data): ?>
+        <!-- Display Date for Each Order -->
+        <div class="user-date">Order Date: <?= $order_data['order_date'] ?></div>
+        <?php 
+        $total_amount = 0;
+        $has_pending_order = false;
+        ?>
+        <?php foreach ($order_data['items'] as $order): ?>
+            <?php 
+            $total_amount += $order['total_price'];
+            if ($order['order_status'] === 'pending') {
+                $has_pending_order = true;
+            }
+            ?>
+            <!-- Display Product Info -->
+            <div class="user-prod-container">
+                <div class="user-prod-img">
+                    <img src="../asset/images/product/<?= $order['product_image'] ?>" alt="<?= $order['name'] ?>">
+                    <div class="user-prod-details">
+                        <h4><?= $order['name'] ?></h4>
+                        <span><?= $order['price'] ?> RWF</span>
                     </div>
-                <?php endforeach; ?>
-            <?php endforeach; ?>
-            <p style="text-align: right;margin-right: 30px;margin-top:20px;font-weight:600">Total order price: <?= htmlspecialchars($order['total_amount']) ?> RWF</p>
-        <div >
-
-            <?php if ($pending_order_found): ?>
-                <a href="payment_order.php?order_id=<?= $order_id ?>"   class="pay">Pay now</a>
+                </div>
+                <div>
+                    <h4>Size</h4>
+                    <p><?= $order['size'] ?></p>
+                </div>
+                <div>
+                    <h4>Quantity</h4>
+                    <p><?= $order['quantity'] ?></p>
+                </div>
+                <div>
+                    <h4>Total price</h4>
+                    <p><?= $order['total_price'] ?> RWF</p>
+                </div>
+                <div style="text-align: left;">
+                    <!-- Display "Edit" button only if order status is "pending" -->
+                    <?php if ($order['order_status'] === 'pending'): ?>
+                        <div style="background-color:none;">
+                            <a href="edit_order.php?order_item_id=<?= $order['order_item_id'] ?>&order_id=<?= $order_id ?>" style="color: black;"> 
+                                <i class="bi bi-pencil-square"></i> Edit
+                            </a>
+                        </div>
+                    <?php endif; ?>
+                    <div class="delete" data-order-item-id="<?= $order['order_item_id'] ?>">
+                        <div><i class="bi bi-trash3"></i> Delete</div>
+                    </div>
+                </div>
+            </div>
+        <?php endforeach; ?>
+        <p style="text-align: right;margin-right: 30px;margin-top:20px;font-weight:600">Total order price: <?= htmlspecialchars($total_amount) ?> RWF</p>
+        <div>
+            <?php if ($has_pending_order): ?>
+                <a href="payment_order.php?order_id=<?= $order_id ?>" class="pay">Pay now</a>
             <?php else: ?>
                 <p style="text-align: right;margin-right: 30px;">
                     <?php 
@@ -182,26 +182,26 @@ foreach ($orders as $order) {
                             case 'cancelled':
                                 echo "Payment failed ❌";
                                 break;
+                               
                         }
                     ?>
                 </p>
             <?php endif; ?>
         </div>
-        <?php endforeach; ?>
+    <?php endforeach; ?>
     </section>
 
     <div class="popup hidden-popup">
         <div class="popup-container">
-            <h3>Dear Admin,</h3>
+            <h3>Dear Customer,</h3>
             <p>Are you sure you want to delete this item <br>from your system?</p>
             <div style="margin-top: 20px; justify-content:space-between;display:flex" class="popup-btn">
                 <button style="cursor:pointer;" class="cancel-popup icons-link">Cancel</button>
-                <button style="cursor:pointer;" class="delete-popup icons-link">Delete</button>
+                <a href="#" class="confirm-delete icons-link" style="cursor:pointer;">Delete</a>
             </div>
         </div>
     </div>
-
-    <script src="../asset/javascript/delete_order_popup.js"></script>
+    <!--script-->
+    <script src="../asset/js/user.js"></script>
 </body>
-
 </html>

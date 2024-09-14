@@ -188,3 +188,30 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 });
+
+/*----------------------------------
+#View products
+----------------------------------*/
+document.addEventListener('DOMContentLoaded', function () {
+    const categoryItems = document.querySelectorAll('.categories-list ul li');
+    const shirtCategories = document.querySelectorAll('.shirt-item');
+
+    for (let item of categoryItems) {
+        item.addEventListener('click', function () {
+            for (let catItem of categoryItems) {
+                catItem.classList.remove('active');
+            }
+            this.classList.add('active');
+
+            const filter = this.getAttribute('data-filter');
+
+            for (let category of shirtCategories) {
+                if (category.classList.contains(filter)) {
+                    category.style.display = 'flex';
+                } else {
+                    category.style.display = 'none';
+                }
+            }
+        });
+    }
+});

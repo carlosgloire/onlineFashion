@@ -15,7 +15,7 @@ $db = new PDO("mysql:host=localhost;dbname=Online_fashion_store_management_syste
     $query->execute(array($_SESSION['role']));
      
     if(($_SESSION['role']) != 'admin'){
-        header("Location: ../templates/");
+        header("Location: ../../templates/");
         exit();
     }
    

@@ -45,7 +45,6 @@ if ($user) {
 
     <!--css-->
     <link rel="stylesheet" href="../asset/css/style.css">
-    <link rel="shortcut icon" href="../asset/images/logo.png">
 
     <!--Icons-->
     <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.0/css/boxicons.min.css">
@@ -71,11 +70,11 @@ if ($user) {
                 <form action="../controllers/update_userprofile.php" method="POST" enctype="multipart/form-data">
                     <div class="inputs">
                         <i class="bi bi-person"></i>
-                        <input  name="fname" type="text" placeholder="Enter first name" value="<?=$fname?>">
+                        <input name="fname" type="text" placeholder="Enter first name" value="<?=$fname?>">
                     </div>
                     <div class="inputs">
                         <i class="bi bi-person"></i>
-                        <input  name="lname" type="text" placeholder="Enter second name" value="<?=$lname?>">
+                        <input name="lname" type="text" placeholder="Enter second name" value="<?=$lname?>">
                     </div>
                     <div class="inputs">
                         <i class="bi bi-envelope"></i>
@@ -92,14 +91,18 @@ if ($user) {
                     <p style="margin-left: 15px;">Profile photo</p>
                     <div class="inputs">
                         <i class="bi bi-file-earmark-image"></i>
-                        <input type="file" id="uploadfile" name="uploadfile" accept=".jpg, .jpeg, .png"  >
+                        <input type="file" id="uploadfile" name="uploadfile" accept=".jpg, .jpeg, .png">
                     </div>
-                    
+                    <div class="inputs">
+                        <i class="bi bi-lock"></i>
+                        <input type="password" name="current_password" placeholder="Enter your current password" required>
+                    </div>
                     <div class="input-submit">
                         <input type="submit" name='edit' value="Update">
                     </div>
                     <p style="color:red;font-size:13px;text-align:center"><?=$error?></p>
                 </form>
+
             </div>
         </div>
     </section>

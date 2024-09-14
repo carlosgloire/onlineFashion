@@ -72,7 +72,6 @@ foreach ($orders as $order) {
     <link rel="stylesheet" href="../../asset/css/style.css">
     <link rel="stylesheet" href="../../asset/css/product.css">
     <link rel="stylesheet" href="../../asset/css/admin.css">
-    <link rel="shortcut icon" href="../../asset/images/logo.png">
        <!--Icons-->
        <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.0/css/boxicons.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.0/font/bootstrap-icons.css" rel="stylesheet">
@@ -85,6 +84,7 @@ foreach ($orders as $order) {
     <!--Font family -->
     <link href="https://fonts.googleapis.com/css2?family=Kulim+Park:ital,wght@0,200;0,300;0,400;0,600;0,700;1,200;1,300;1,400;1,600;1,700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Kulim+Park:ital,wght@0,200;0,300;0,400;0,600;0,700;1,200;1,300;1,400;1,600;1,700&family=Raleway:ital,wght@0,100..900;1,100..900&family=Sulphur+Point:wght@300;400;700&display=swap" rel="stylesheet">
+
 </head>
 <body>
     <section class="admin-section">
@@ -121,69 +121,59 @@ foreach ($orders as $order) {
             <?php foreach ($grouped_orders as $firstname => $orders_by_firstname): ?>
                 <?php foreach ($orders_by_firstname as $lastname => $user_details): ?>
                     <div class="admin-orders">
-                        <div style=" justify-content: space-between; align-items:center; margin-bottom: 10px; flex-wrap:wrap;">
-                            <div >
-                            <div>
-                                <h4><?php echo htmlspecialchars($firstname . ' ' . $lastname); ?></h4>
-                                <p><?php echo htmlspecialchars($user_details['address'] . ' - ' . $user_details['phone_number']); ?></p>
-                            </div>
-                            <?php foreach ($user_details['dates'] as $date => $orders_by_date): ?>
-                                <div style="font-weight: bold; margin-top: 20px;">
-                                    <h4 ><?=$date?></h4>
-                                </div>
-                            </div>
-                           
-                                <?php foreach ($orders_by_date as $order_id => $items): 
-                                    $total_order_price = 0;
-                                    $pending_order_found = false;
-                                    foreach ($items as $item):
-                                        $total_order_price += $item['total_price'];
-                                        if ($item['order_status'] == 'pending') {
-                                            $pending_order_found = true;
-                                        }
-                                    ?>
-                                    <div style="margin-top:10px ;" class="user-prod-container">
-                                        <div class="user-prod-img">
-                                            <img src="../../templates//product_images/<?php echo htmlspecialchars($items[0]['product_image']); ?>" alt="">
-                                            <div class="user-prod-details">
-                                                <h4><?php echo htmlspecialchars($items[0]['name']); ?></h4>
-                                                <span><?php echo htmlspecialchars($items[0]['price']); ?> RWF</span>
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <h4>Size</h4>
-                                            <p><?php echo htmlspecialchars($items[0]['size']); ?></p>
-                                        </div>
-                                        <div>
-                                            <h4>Quantity</h4>
-                                            <p><?php echo htmlspecialchars($items[0]['quantity']); ?></p>
-                                        </div>
-                                        <div>
-                                            <h4>Total price</h4>
-                                            <p><?php echo htmlspecialchars($items[0]['total_price']); ?> RWF</p>
-                                        </div>
-                                       
-                                    </div>
-                                    <?php endforeach; ?>
-                                    <p style="text-align: right;margin-right: 30px;margin-top:20px;font-weight:600">Total order price: <?= htmlspecialchars($total_order_price) ?> RWF</p>
-                                    <p style="text-align: right;margin-right: 30px;">
-                                        <?php 
-                                            switch ($items[0]['order_status']) {
-                                                case 'pending':
-                                                    echo "Payment status: Pending </span>";
-                                                    break;
-                                                case 'completed':
-                                                    echo "Payment status: Completed <span style='color:green'>✔</span>";
-                                                    break;
-                                                case 'cancelled':
-                                                    echo "Payment status: Cancelled ";
-                                                    break;
-                                            }
-                                        ?>
-                                    </p>
-                                <?php endforeach; ?>
-                            <?php endforeach; ?>
+                        <div style="margin-bottom: 20px;">
+                            <h4><?php echo htmlspecialchars($firstname . ' ' . $lastname); ?></h4>
+                            <p><?php echo htmlspecialchars($user_details['address'] . ' - ' . $user_details['phone_number']); ?></p>
                         </div>
+                        <?php foreach ($user_details['dates'] as $date => $orders_by_date): ?>
+                            <div style="font-weight: bold; margin-top: 20px;">
+                                <h4><?php echo $date; ?></h4>
+                            </div>
+                            <?php foreach ($orders_by_date as $order_id => $items): 
+                                $total_order_price = 0;
+                                foreach ($items as $item):
+                                    $total_order_price += $item['total_price'];
+                                ?>
+                                <div class="user-prod-container" style="display: flex; flex-wrap: wrap; justify-content: space-between; margin-top: 10px;">
+                                    <div class="user-prod-img">
+                                        <img src="../../templates/product_images/<?php echo htmlspecialchars($item['product_image']); ?>" alt="">
+                                        <div class="user-prod-details">
+                                            <h4><?php echo htmlspecialchars($item['name']); ?></h4>
+                                            <span><?php echo htmlspecialchars($item['price']); ?> RWF</span>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <h4>Size</h4>
+                                        <p><?php echo htmlspecialchars($item['size']); ?></p>
+                                    </div>
+                                    <div>
+                                        <h4>Quantity</h4>
+                                        <p><?php echo htmlspecialchars($item['quantity']); ?></p>
+                                    </div>
+                                    <div>
+                                        <h4>Total price</h4>
+                                        <p><?php echo htmlspecialchars($item['total_price']); ?> RWF</p>
+                                    </div>
+                                </div>
+                                <?php endforeach; ?>
+                                <p style="text-align: right; margin-top: 10px; font-weight: 600;">Total order price: <?php echo htmlspecialchars($total_order_price); ?> RWF</p>
+                                <p style="text-align: right;">
+                                    <?php 
+                                    switch ($items[0]['order_status']) {
+                                        case 'pending':
+                                            echo "Payment status: Pending";
+                                            break;
+                                        case 'completed':
+                                            echo "Payment status: Completed <span style='color:green'>✔</span>";
+                                            break;
+                                        case 'cancelled':
+                                            echo "Payment status: Cancelled";
+                                            break;
+                                    }
+                                    ?>
+                                </p>
+                            <?php endforeach; ?>
+                        <?php endforeach; ?>
                     </div>
                 <?php endforeach; ?>
             <?php endforeach; ?>

@@ -46,7 +46,6 @@ if (strtotime($user["reset_token_expires_at"]) <= time()) {
 
     <!--css-->
     <link rel="stylesheet" href="../asset/css/style.css">
-    <link rel="shortcut icon" href="asset/images/logo.png">
 
     <!--Icons-->
     <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.0/css/boxicons.min.css">

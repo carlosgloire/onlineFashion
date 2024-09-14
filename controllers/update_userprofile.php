@@ -15,7 +15,7 @@ $query->execute([$user_id]);
 $user = $query->fetch();
 if (!$user) {
     echo '<script>alert("User ID not found.");</script>';
-    echo '<script>window.location.href="templates/";</script>';
+    echo '<script>window.location.href="../templates/";</script>';
     exit;
 }
 $photo = $user['profile'];
@@ -33,13 +33,22 @@ if (isset($_POST['edit'])) {
     $allowedExtensions = ['png', 'jpg', 'jpeg'];
     $pattern = '/\.(' . implode('|', $allowedExtensions) . ')$/i';
 
+    // Verify current password
+    $current_password = $_POST['current_password'];
+    if (!password_verify($current_password, $user['password'])) {
+        echo '<script>alert("Incorrect password. Please try again.");</script>';
+        echo '<script>window.location.href="../templates/useredit.php";</script>';
+        exit;
+    }
+
+    // Check for existing email
     $existing_user_query = $db->prepare("SELECT * FROM users WHERE email = :email AND user_id != :user_id");
     $existing_user_query->execute(array('email' => $email, 'user_id' => $_SESSION['user_id']));
     $existing_user = $existing_user_query->fetch(PDO::FETCH_ASSOC);
 
     if (empty($firstname) || empty($lastname) || empty($email) || empty($phone) || empty($address)) {
         echo '<script>alert("Please complete all fields.");</script>';
-        echo '<script>window.location.href="../templates/profil.php";</script>';
+        echo '<script>window.location.href="../templates/useredit.phpprofil.php";</script>';
         exit;
     } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         echo '<script>alert("Your email is incorrect.");</script>';
@@ -51,23 +60,23 @@ if (isset($_POST['edit'])) {
         exit;
     } elseif ($filesize > 3000000) {
         echo '<script>alert("Your file must not exceed 3Mb");</script>';
-        echo '<script>window.location.href="../templates/profil.php";</script>';
+        echo '<script>window.location.href="../templates/useredit.php";</script>';
         exit;
     } elseif (!empty($filename) && !move_uploaded_file($tempname, $folder)) {
         echo '<script>alert("Error while uploading");</script>';
-        echo '<script>window.location.href="../templates/profil.php";</script>';
+        echo '<script>window.location.href="../templates/useredit.php";</script>';
         exit;
     } elseif ($existing_user) {
         echo '<script>alert("There is another account created with the email address you entered in this system. Please change the email or delete the account.");</script>';
-        echo '<script>window.location.href="../templates/profil.php";</script>';
+        echo '<script>window.location.href="../templates/useredit.php";</script>';
         exit;
     } else {
         if (empty($filename)) {
             $filename = $photo;
         }
 
-        $query = $db->prepare("UPDATE users SET firstname = ?, lastname = ?, email = ?, phone_number = ?,  address = ?, profile = ? WHERE user_id = ?");
-        $update = $query->execute(array($firstname, $lastname, $email, $phone,  $address, $filename, $_SESSION['user_id']));
+        $query = $db->prepare("UPDATE users SET firstname = ?, lastname = ?, email = ?, phone_number = ?, address = ?, profile = ? WHERE user_id = ?");
+        $update = $query->execute(array($firstname, $lastname, $email, $phone, $address, $filename, $_SESSION['user_id']));
 
         if ($update) {
             echo '<script>alert("Profile updated successfully.");</script>';
@@ -76,7 +85,7 @@ if (isset($_POST['edit'])) {
             exit;
         } else {
             echo '<script>alert("Error updating profile.");</script>';
-            echo '<script>window.location.href="../templates/profil.php";</script>';
+            echo '<script>window.location.href="../templates/useredit.php";</script>';
             exit;
         }
     }

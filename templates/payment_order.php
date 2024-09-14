@@ -19,8 +19,11 @@ if (!$order) {
     header('Location: cart.php');
     exit();
 }
+//Select the price
+$quantity_price = $db->prepare('SELECT SUM(total_price) AS total_amount FROM order_item_user WHERE order_id = ?');
+$quantity_price->execute([$order_id]);
+$totalorder = $quantity_price->fetchColumn();
 
-$totalorder = $order['total_amount'];
 $quantity_query = $db->prepare('SELECT SUM(quantity) AS total_quantity FROM order_item WHERE order_id = ?');
 $quantity_query->execute([$order_id]);
 $order_quantity = $quantity_query->fetchColumn();
@@ -47,7 +50,6 @@ if (!$user) {
 
     <!--css-->
     <link rel="stylesheet" href="../asset/css/style.css">
-    <link rel="shortcut icon" href="../asset/images/logo.png">
 
     <!--Icons-->
     <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.0/css/boxicons.min.css">

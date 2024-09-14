@@ -37,6 +37,60 @@ input{
     height: auto;
 }
 
+/* -------------------- */
+
+.categories-list ul {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    -webkit-column-gap: 10px;
+}
+
+.categories-list ul li {
+    color: #000;
+    cursor: pointer;
+    font-size: 0.8rem;
+    padding: 10px 20px;
+    border-radius: 20px;
+    transition-delay: 0.4s;
+    transition: 0.8s ease-in-out;
+    background-color: #fff;
+    box-shadow: 0px 1px 10px #c2c2c25d;
+}
+
+.categories-list ul li.active {
+    color: #fff;
+    transition-delay: 0.4s;
+    transition: 0.8s ease-in-out;
+    /* background-color: #141b1fda; */
+    background-color: #37517e;
+}
+
+.shirt-item {
+    display: none;
+    margin-top: 30px;
+    flex-wrap: wrap;
+    gap: 15px;
+    -webkit-column-gap: 15px;
+    justify-content: center;
+}
+
+.shoes-item .shirt {
+    position: relative;
+}
+
+.all-shirt {
+    display: flex;
+}
+
+.men-shirt {
+    display: none;
+}
+
+.wemen-shirt {
+    display: none;
+}
+
 
 /*------------------------/
 #Product details page
@@ -803,3 +857,4 @@ input{
         padding: 20px 25px;
     }
 }
+

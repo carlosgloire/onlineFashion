@@ -11,7 +11,7 @@ function notconnected(){
 }
 notconnected();
 
-$user_id = $_SESSION['user_id'];
+$user_id = $_SESSION['userID'];
 
 // Check if user_id exists in the users table
 $query = $db->prepare('SELECT * FROM users WHERE user_id = ?');

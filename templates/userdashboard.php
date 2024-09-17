@@ -6,7 +6,7 @@ logout();
 notconnected();
 
 // Fetch orders, order items, and product details from the database
-$user_id = $_SESSION['user_id'];
+$user_id = $_SESSION['userID'];
 $query = $db->prepare("
     SELECT 
         o.order_id,

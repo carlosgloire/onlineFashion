@@ -28,9 +28,9 @@ if (isset($_SESSION['cart']) && !empty($_SESSION['cart'])) {
 }
 
 $user = null;
-if (isset($_SESSION['user_id'])) {
+if (isset($_SESSION['userID'])) {
     $query = $db->prepare("SELECT * FROM users WHERE user_id = :user_id");
-    $query->execute(['user_id' => $_SESSION['user_id']]);
+    $query->execute(['user_id' => $_SESSION['userID']]);
     $user = $query->fetch();
 }
 ?>

@@ -12,9 +12,9 @@ function notAdmin(){
 $db = new PDO("mysql:host=localhost;dbname=Online_fashion_store_management_system", "root", "",
  [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
     $query = $db->prepare('SELECT role FROM users WHERE role =?');
-    $query->execute(array($_SESSION['role']));
+    $query->execute(array($_SESSION['role_admin']));
      
-    if(($_SESSION['role']) != 'admin'){
+    if(($_SESSION['role_admin']) != 'admin'){
         header("Location: ../../templates/");
         exit();
     }
@@ -22,7 +22,7 @@ $db = new PDO("mysql:host=localhost;dbname=Online_fashion_store_management_syste
 }
 function logout(){
     if(isset($_POST['logout'])){
-        session_destroy();
+        unset($_SESSION['user_credentials']);
         header('location:../templates/');
         exit();
     }
@@ -30,7 +30,7 @@ function logout(){
 
 function logout_admin(){
     if(isset($_POST['logout'])){
-        session_destroy();
+        unset($_SESSION['user_credentials']);
         header('location:../../templates/');
         exit();
     }

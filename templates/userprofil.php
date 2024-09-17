@@ -6,7 +6,7 @@
     logout();
    
         $query = $db->prepare('SELECT * FROM users WHERE user_id = ?');
-        $query->execute(array($_SESSION['user_id']));
+        $query->execute(array($_SESSION['userID']));
         $user = $query->fetch(PDO::FETCH_ASSOC);
     
 ?>
@@ -104,7 +104,7 @@
                         </div>
                     </div>
                    
-                        <p style="color: red;cursor:pointer;text-align:center" class="delete" userID="<?=$_SESSION['user_id'] ?>" title="Delete Account "><i  class="bi bi-trash3" ></i></p>
+                        <p style="color: red;cursor:pointer;text-align:center" class="delete" userID="<?=$_SESSION['userID'] ?>" title="Delete Account "><i  class="bi bi-trash3" ></i></p>
                         <?=popup_delete_count($error,$user)?>
                         <script src="../asset/javascript/popup_ddelete_account.js"></script>
                 </div>

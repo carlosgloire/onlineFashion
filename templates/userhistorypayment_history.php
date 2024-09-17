@@ -5,7 +5,7 @@ require_once('../database/db.php');
 logout();
 notconnected();
 
-$user_id = $_SESSION['user_id'];
+$user_id = $_SESSION['userID'];
 
 $sql = "
 SELECT 

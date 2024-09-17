@@ -11,9 +11,9 @@
         }
     }
     $user = null;
-    if (isset($_SESSION['user_id'])) {
+    if (isset($_SESSION['userID'])) {
         $query = $db->prepare("SELECT * FROM users WHERE user_id = :user_id");
-        $query->execute(['user_id' => $_SESSION['user_id']]);
+        $query->execute(['user_id' => $_SESSION['userID']]);
         $user = $query->fetch();
     }
 
@@ -27,7 +27,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Products</title>
+    
 
     <!--css-->
     <link rel="stylesheet" href="../asset/css/style.css">
@@ -44,7 +44,7 @@
     <!--Font family -->
     <link href="https://fonts.googleapis.com/css2?family=Kulim+Park:ital,wght@0,200;0,300;0,400;0,600;0,700;1,200;1,300;1,400;1,600;1,700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Kulim+Park:ital,wght@0,200;0,300;0,400;0,600;0,700;1,200;1,300;1,400;1,600;1,700&family=Raleway:ital,wght@0,100..900;1,100..900&family=Sulphur+Point:wght@300;400;700&display=swap" rel="stylesheet">
-
+    <title>Home</title>
 </head>
 
 <body>
@@ -75,7 +75,7 @@
             <div class="overlay"></div>
             <i class="bi bi-x-lg exit"></i>
             <?php
-                if (isset($_SESSION['user']) && $_SESSION['user']){
+                if (isset($_SESSION['user_credentials']) && $_SESSION['user_credentials']){
                     ?>
                         <div class="online">
                             <div class="online-img">

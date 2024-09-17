@@ -12,6 +12,7 @@ $query = $db->prepare("
         o.order_id,
         o.order_date,
         o.status as order_status,
+        o.delivered,  
         u.firstname,
         u.lastname,
         u.address,
@@ -29,6 +30,7 @@ $query = $db->prepare("
     JOIN products p ON oi.product_id = p.product_id
     ORDER BY u.firstname, u.lastname, o.order_date DESC
 ");
+
 $query->execute();
 $orders = $query->fetchAll(PDO::FETCH_ASSOC);
 
@@ -165,6 +167,16 @@ foreach ($orders as $order) {
                                             break;
                                         case 'completed':
                                             echo "Payment status: Completed <span style='color:green'>✔</span>";
+                                            
+                                            // Check if delivery column is "Delivered"
+                                            if ($items[0]['delivered'] === 'Delivered') {
+                                                echo "<p>Delivery Status: <span style='color: #37517e;'>Delivered</span></p>";
+                                            } else {
+                                                echo '<form method="POST" action="update_delivery.php">
+                                                        <input type="hidden" name="order_id" value="' . htmlspecialchars($order_id) . '">
+                                                        <button style="background-color: #37517e; padding:3px 15px; color:white; margin-bottom:10px; font-size:1.2rem; cursor:pointer; border-radius:5px;border:none" type="submit" class="btn btn-primary" title="Deliver this product">Deliver this order</button>
+                                                    </form>';
+                                            }
                                             break;
                                         case 'cancelled':
                                             echo "Payment status: Cancelled";
@@ -172,6 +184,7 @@ foreach ($orders as $order) {
                                     }
                                     ?>
                                 </p>
+
                             <?php endforeach; ?>
                         <?php endforeach; ?>
                     </div>

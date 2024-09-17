@@ -21,9 +21,9 @@ if(isset($_POST['login'])){
       $user = $request->fetch(PDO::FETCH_ASSOC);
       if($user){
          if (password_verify($password,$user['password'])) {
-            $_SESSION['user_id']=$user['user_id'];
-            $_SESSION['role']=$user['role'];
-            $_SESSION['user']=$user;
+            $_SESSION['userID']=$user['user_id'];
+            $_SESSION['role_admin']=$user['role'];
+            $_SESSION['user_credentials']=$user;
             header("location: ../templates/");
             exit;
          }

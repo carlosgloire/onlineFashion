@@ -8,9 +8,9 @@ require_once('../controllers/functions.php');
 logout();
 if (isset($_GET['user_id']) && !empty($_GET['user_id'])) {
     $user_id = $_GET['user_id'];
-    $_SESSION['user_id'] = $user_id; // Ensure session user_id is set
-} elseif (isset($_SESSION['user_id']) && !empty($_SESSION['user_id'])) {
-    $user_id = $_SESSION['user_id'];
+    $_SESSION['userID'] = $user_id; // Ensure session user_id is set
+} elseif (isset($_SESSION['userID']) && !empty($_SESSION['userID'])) {
+    $user_id = $_SESSION['userID'];
 } else {
     echo '<script>alert("No user ID provided.");</script>';
     echo '<script>window.location.href="templates/";</script>';

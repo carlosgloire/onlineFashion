@@ -3,13 +3,13 @@ session_start();
 require_once('../database/db.php');
 require_once('../controllers/functions.php');
 notconnected();
-if (!isset($_SESSION['order_id']) || !isset($_SESSION['user_id'])) {
+if (!isset($_SESSION['order_id']) || !isset($_SESSION['userID'])) {
     header('Location: cart.php');
     exit();
 }
 
 $order_id = $_SESSION['order_id'];
-$user_id = $_SESSION['user_id'];
+$user_id = $_SESSION['userID'];
 
 // Fetch order details
 $order_query = $db->prepare('SELECT * FROM orders WHERE order_id = ?');

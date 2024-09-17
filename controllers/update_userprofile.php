@@ -2,8 +2,8 @@
 session_start();
 require_once('../database/db.php');
 
-if (isset($_SESSION['user_id']) && !empty($_SESSION['user_id'])) {
-    $user_id = $_SESSION['user_id'];
+if (isset($_SESSION['userID']) && !empty($_SESSION['userID'])) {
+    $user_id = $_SESSION['userID'];
 } else {
     echo '<script>alert("No user ID provided.");</script>';
     echo '<script>window.location.href="../templates/";</script>';
@@ -43,7 +43,7 @@ if (isset($_POST['edit'])) {
 
     // Check for existing email
     $existing_user_query = $db->prepare("SELECT * FROM users WHERE email = :email AND user_id != :user_id");
-    $existing_user_query->execute(array('email' => $email, 'user_id' => $_SESSION['user_id']));
+    $existing_user_query->execute(array('email' => $email, 'user_id' => $_SESSION['userID']));
     $existing_user = $existing_user_query->fetch(PDO::FETCH_ASSOC);
 
     if (empty($firstname) || empty($lastname) || empty($email) || empty($phone) || empty($address)) {
@@ -76,7 +76,7 @@ if (isset($_POST['edit'])) {
         }
 
         $query = $db->prepare("UPDATE users SET firstname = ?, lastname = ?, email = ?, phone_number = ?, address = ?, profile = ? WHERE user_id = ?");
-        $update = $query->execute(array($firstname, $lastname, $email, $phone, $address, $filename, $_SESSION['user_id']));
+        $update = $query->execute(array($firstname, $lastname, $email, $phone, $address, $filename, $_SESSION['userID']));
 
         if ($update) {
             echo '<script>alert("Profile updated successfully.");</script>';

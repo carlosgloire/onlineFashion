@@ -4,7 +4,7 @@ require_once('../database/db.php');
 
 if (isset($_GET['order_id']) && !empty($_GET['order_id'])) {
     $order_id = $_GET['order_id'];
-    $user_id = $_SESSION['user_id'];
+    $user_id = $_SESSION['userID'];
 } else {
     echo '<script>alert("No order ID provided.");</script>';
     echo '<script>window.location.href="templates/";</script>';

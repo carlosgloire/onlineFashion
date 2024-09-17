@@ -7,7 +7,7 @@ $error = null;
 if (isset($_POST['delete'])) {
     // Request to get the password from the database
     $requete = $db->prepare("SELECT password FROM users WHERE user_id = :user_id");
-    $requete->execute(['user_id' => $_SESSION['user_id']]);
+    $requete->execute(['user_id' => $_SESSION['userID']]);
     $get_password = $requete->fetch();
 
     $password2 = htmlspecialchars($_POST['password2']);   
@@ -18,7 +18,7 @@ if (isset($_POST['delete'])) {
     } else {
         // Verify user ID and delete the account
         $recup_id = $db->prepare("SELECT user_id FROM users WHERE user_id = :user_id");
-        $recup_id->execute(['user_id' => $_SESSION['user_id']]);
+        $recup_id->execute(['user_id' => $_SESSION['userID']]);
         $user_id = $recup_id->fetch();
         
         if ($recup_id->rowCount() > 0) {

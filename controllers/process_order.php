@@ -3,7 +3,7 @@ session_start();
 require_once('../database/db.php');
 
 function notconnected(){
-    if (!isset($_SESSION['user'])) {
+    if (!isset( $_SESSION['user_credentials'])) {
         // Redirect to the login page if not logged in
         header("Location: ../templates/login.php");
         exit();

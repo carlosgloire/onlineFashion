@@ -78,7 +78,7 @@
             </div>
             <div class="overlay"></div>
             <i class="bi bi-x-lg exit"></i>
-            <?php if (isset($_SESSION['user']) && $_SESSION['user_credentials']) { ?>
+            <?php if (isset( $_SESSION['user_credentials']) && $_SESSION['user_credentials']) { ?>
                 <div class="online">
                     <div class="online-img">
                         <p><img src="profiles/<?=$user['profile']?>" alt="profile photo"></p>
